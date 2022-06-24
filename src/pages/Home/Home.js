@@ -5,40 +5,20 @@ import "./Home.css"
 
 function Home() {
 
-  ///// Form Stuff /////
+  const areaForm = document.getElementById("areaForm")
+  const areaInput = document.getElementById("areaInput")
+  const sendIt = document.getElementById("sendIt")
 
-  const url = ""
-  const [data, setData] = useState({
-    area: ""
-  })
-
-  function submit(e) {
-    e.preventDefault(); // stops console from clearing when you submit
-    axios.Axios.post(url, {
-      area: data.area
-    })
-    .then(res=>{
-      console.log(res.data)
-    })
-  }
-
-  function handle(e){
-    const newdata = {...data}
-    newdata[e.target.id] = e.target.value
-    setData(newdata)
-    console.log(newdata)
-  }
+  
 
   ///// Ski API (https://rapidapi.com/joeykyber/api/ski-resort-forecast/) /////
 
-  const axios = require("axios");
-
   const options = {
     method: 'GET',
-    url: 'https://ski-resort-forecast.p.rapidapi.com/Vail/forecast',
+    url: 'https://ski-resort-forecast.p.rapidapi.com/vail/forecast',
     params: { units: 'i', el: 'top' },
     headers: {
-      'X-RapidAPI-Key': 'e36e840a41msh2d5a4d7faeb397ap1c7d91jsn9beadf5586dd',
+      'X-RapidAPI-Key': 'e36e840a41msh2d5a4d7faeb397ap1c7d91jsn9beadf5586dd', // Need to hide API key
       'X-RapidAPI-Host': 'ski-resort-forecast.p.rapidapi.com'
     }
   };
@@ -49,19 +29,24 @@ function Home() {
     console.error(error);
   });
 
+
+
   return (
     <div className="Home">
 
       <h1>Control Pannel</h1>
       <p>Click map to show your location</p>
 
-      <form onSubmit={(e)=>submit(e)}>
-        <input onChange={(e)=>handle(e)} id="area" value={data.area} placeholder="Enter a ski area" type="text"></input>
-        <button>Send it</button>
+      <form id="areaForm" action="/" method="GET">
+        <input placeholder="Enter a ski area" type="text" id="areaInput"/>
+        <input type="button" id="sendIt" value="send it"/>
       </form>
 
     </div>
 )
+
+
+
 }
 
 export default Home;
