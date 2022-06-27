@@ -5,9 +5,19 @@ import "./Home.css"
 
 function Home() {
 
-  const areaForm = document.getElementById("areaForm")
-  const areaInput = document.getElementById("areaInput")
-  const sendIt = document.getElementById("sendIt")
+  window.onload = function () {
+    const areaForm = document.getElementById("areaForm")
+    const areaInput = document.getElementById("areaInput")
+    const submit = document.getElementById("submit")
+
+    document.querySelector('form.areaForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      console.log(areaInput.value);
+    })
+  }
+
+
 
   
 
@@ -30,16 +40,15 @@ function Home() {
   });
 
 
-
   return (
     <div className="Home">
 
       <h1>Control Pannel</h1>
       <p>Click map to show your location</p>
 
-      <form id="areaForm" action="/" method="GET">
+      <form id="areaForm" action="/" method="GET" className="areaForm">
         <input placeholder="Enter a ski area" type="text" id="areaInput"/>
-        <input type="button" id="sendIt" value="send it"/>
+        <button type="submit" id="submit">Send It</button>
       </form>
 
     </div>
