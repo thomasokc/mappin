@@ -1,44 +1,49 @@
-import React, { useState } from "react";
-import axios from "axios";
+import React, { useState, useEffect } from "react";
+import axios from "axios"; // We replaced axios with fetch to try some shit
 
 import "./Home.css"
 
 function Home() {
 
-  window.onload = function () {
-    const areaForm = document.getElementById("areaForm")
-    const areaInput = document.getElementById("areaInput")
-    const submit = document.getElementById("submit")
+  const [endPoint, setEndPoints] = useState('')
+  const [container, setContainer] = useState([])
 
-    document.querySelector('form.areaForm').addEventListener('submit', function (e) {
-      e.preventDefault();
+  useEffect(() => {
+    fetchMe()
+  }, [endPoint])
+    
 
-      console.log(areaInput.value);
-    })
-  }
+    const fetchMe = () => {
 
-
-
+      const options = {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-RapidAPI-Key': 'e36e840a41msh2d5a4d7faeb397ap1c7d91jsn9beadf5586dd',
+          'X-RapidAPI-Host': 'ski-resort-forecast.p.rapidapi.com'
+        }
+      };
+  
+    fetch(`https://ski-resort-forecast.p.rapidapi.com/${endPoint}/forecast?units=i&el=top`, options)
+      .then(async response => {
+        try {
+         const data = await response.json()
+         console.log('response data?', data)
+       } catch(error) {
+         console.log('Error happened here!')
+         console.error(error)
+       }
+      })
+    }
   
 
-  ///// Ski API (https://rapidapi.com/joeykyber/api/ski-resort-forecast/) /////
+  const onChangeHandler = (e) => {
+    setEndPoints(e.target.value)
+  }
 
-  const options = {
-    method: 'GET',
-    url: 'https://ski-resort-forecast.p.rapidapi.com/vail/forecast',
-    params: { units: 'i', el: 'top' },
-    headers: {
-      'X-RapidAPI-Key': 'e36e840a41msh2d5a4d7faeb397ap1c7d91jsn9beadf5586dd', // Need to hide API key
-      'X-RapidAPI-Host': 'ski-resort-forecast.p.rapidapi.com'
-    }
-  };
-
-  axios.request(options).then(function (response) {
-    console.log(response.data);
-  }).catch(function (error) {
-    console.error(error);
-  });
-
+  const submitHandler = (e) => {
+    e.preventDefault()
+  }
 
   return (
     <div className="Home">
@@ -46,10 +51,16 @@ function Home() {
       <h1>Control Pannel</h1>
       <p>Click map to show your location</p>
 
-      <form id="areaForm" action="/" method="GET" className="areaForm">
-        <input placeholder="Enter a ski area" type="text" id="areaInput"/>
+      <form id="areaForm" className="areaForm" onSubmit={submitHandler}>
+        <input placeholder="Enter a ski area" type="text" id="areaInput" value={endPoint} onChange={onChangeHandler}/>
         <button type="submit" id="submit">Send It</button>
       </form>
+
+      {container.map((item) => {
+        return (
+          <p>{item}</p>
+        )
+      })}
 
     </div>
 )
